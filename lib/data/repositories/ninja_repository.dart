@@ -24,13 +24,19 @@ class NinjaRepositoryImpl implements NinjaRepository {
   @override
   Future<List<QuoteModel>> getQuotes({String? category, int limit = 5}) async {
     try {
-      // На бесплатном тарифе API-Ninjas параметры limit и category доступны только по подписке Premium
-      final response = await _dio.get(ApiEndpoints.quotes);
+      // На бесплатном тарифе API-Ninjas параметры limit и category доступны только по подписке Premium.
+      // Делаем легкие параллельные запросы без query-параметров для получения свежих цитат:
+      final count = limit.clamp(1, 4);
+      final responses = await Future.wait(
+        List.generate(count, (_) => _dio.get(ApiEndpoints.quotes)),
+      );
 
-      final list = (response.data as List)
-          .map((item) => QuoteModel.fromJson(item as Map<String, dynamic>))
-          .toList();
-
+      final list = <QuoteModel>[];
+      for (final resp in responses) {
+        if (resp.data is List && (resp.data as List).isNotEmpty) {
+          list.add(QuoteModel.fromJson((resp.data as List).first as Map<String, dynamic>));
+        }
+      }
       return list;
     } on DioException catch (e) {
       throw ApiException.fromDioException(e);
@@ -42,13 +48,18 @@ class NinjaRepositoryImpl implements NinjaRepository {
   @override
   Future<List<RiddleModel>> getRiddles({int limit = 5}) async {
     try {
-      // На бесплатном тарифе API-Ninjas параметр limit доступен только по подписке Premium
-      final response = await _dio.get(ApiEndpoints.riddles);
+      // На бесплатном тарифе API-Ninjas параметр limit доступен только по подписке Premium.
+      final count = limit.clamp(1, 4);
+      final responses = await Future.wait(
+        List.generate(count, (_) => _dio.get(ApiEndpoints.riddles)),
+      );
 
-      final list = (response.data as List)
-          .map((item) => RiddleModel.fromJson(item as Map<String, dynamic>))
-          .toList();
-
+      final list = <RiddleModel>[];
+      for (final resp in responses) {
+        if (resp.data is List && (resp.data as List).isNotEmpty) {
+          list.add(RiddleModel.fromJson((resp.data as List).first as Map<String, dynamic>));
+        }
+      }
       return list;
     } on DioException catch (e) {
       throw ApiException.fromDioException(e);
@@ -60,13 +71,18 @@ class NinjaRepositoryImpl implements NinjaRepository {
   @override
   Future<List<FactModel>> getFacts({int limit = 5}) async {
     try {
-      // На бесплатном тарифе API-Ninjas параметр limit доступен только по подписке Premium
-      final response = await _dio.get(ApiEndpoints.facts);
+      // На бесплатном тарифе API-Ninjas параметр limit доступен только по подписке Premium.
+      final count = limit.clamp(1, 4);
+      final responses = await Future.wait(
+        List.generate(count, (_) => _dio.get(ApiEndpoints.facts)),
+      );
 
-      final list = (response.data as List)
-          .map((item) => FactModel.fromJson(item as Map<String, dynamic>))
-          .toList();
-
+      final list = <FactModel>[];
+      for (final resp in responses) {
+        if (resp.data is List && (resp.data as List).isNotEmpty) {
+          list.add(FactModel.fromJson((resp.data as List).first as Map<String, dynamic>));
+        }
+      }
       return list;
     } on DioException catch (e) {
       throw ApiException.fromDioException(e);

@@ -61,59 +61,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'Настройки & API-Ninjas',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            tooltip: 'О проекте и архитектуре (Оценка 5)',
-            icon: const Icon(Icons.info_outline),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) => const ArchitectureInfoDialog(),
-              );
-            },
-          ),
-        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Карточка с информацией о статусе задания
-          Card(
-            color: theme.colorScheme.primaryContainer.withAlpha(80),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.stars_rounded, color: theme.colorScheme.primary, size: 28),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Реализовано на оценку 5',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  const Text('✓ Пакет Dio для работы с сетью'),
-                  const SizedBox(height: 4),
-                  const Text('✓ Кастомный ApiKeyInterceptor для добавления токена (X-Api-Key)'),
-                  const SizedBox(height: 4),
-                  const Text('✓ PrettyDioLogger для цветного вывода сетевых логов в консоль'),
-                  const SizedBox(height: 4),
-                  const Text('✓ Пакет get_it (Service Locator) для DI всех зависимостей'),
-                  const SizedBox(height: 4),
-                  const Text('✓ Полноценное приложение с 5 интерактивными разделами API-Ninjas'),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-
           // Карточка управления ключом API
           Card(
             child: Padding(
@@ -233,41 +184,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 16),
             _buildTestResultCard(context, controller.testResult!),
           ],
-
-          const SizedBox(height: 16),
-          // Инструкция по получению ключа
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Как получить бесплатный API-ключ:',
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text('1. Перейдите на https://api-ninjas.com'),
-                  const SizedBox(height: 4),
-                  const Text('2. Зарегистрируйтесь (Sign Up) бесплатно'),
-                  const SizedBox(height: 4),
-                  const Text('3. Откройте профиль и скопируйте свой API Key'),
-                  const SizedBox(height: 4),
-                  const Text('4. Вставьте ключ в поле выше и нажмите «Сохранить»'),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Если ключа нет, приложение автоматически использует демонстрационные данные, поэтому функционал можно оценить сразу!',
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
