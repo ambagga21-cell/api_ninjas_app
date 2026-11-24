@@ -24,15 +24,8 @@ class NinjaRepositoryImpl implements NinjaRepository {
   @override
   Future<List<QuoteModel>> getQuotes({String? category, int limit = 5}) async {
     try {
-      final queryParams = <String, dynamic>{'limit': limit};
-      if (category != null && category.isNotEmpty && category != 'all') {
-        queryParams['category'] = category;
-      }
-
-      final response = await _dio.get(
-        ApiEndpoints.quotes,
-        queryParameters: queryParams,
-      );
+      // На бесплатном тарифе API-Ninjas параметры limit и category доступны только по подписке Premium
+      final response = await _dio.get(ApiEndpoints.quotes);
 
       final list = (response.data as List)
           .map((item) => QuoteModel.fromJson(item as Map<String, dynamic>))
@@ -49,10 +42,8 @@ class NinjaRepositoryImpl implements NinjaRepository {
   @override
   Future<List<RiddleModel>> getRiddles({int limit = 5}) async {
     try {
-      final response = await _dio.get(
-        ApiEndpoints.riddles,
-        queryParameters: {'limit': limit},
-      );
+      // На бесплатном тарифе API-Ninjas параметр limit доступен только по подписке Premium
+      final response = await _dio.get(ApiEndpoints.riddles);
 
       final list = (response.data as List)
           .map((item) => RiddleModel.fromJson(item as Map<String, dynamic>))
@@ -69,10 +60,8 @@ class NinjaRepositoryImpl implements NinjaRepository {
   @override
   Future<List<FactModel>> getFacts({int limit = 5}) async {
     try {
-      final response = await _dio.get(
-        ApiEndpoints.facts,
-        queryParameters: {'limit': limit},
-      );
+      // На бесплатном тарифе API-Ninjas параметр limit доступен только по подписке Premium
+      final response = await _dio.get(ApiEndpoints.facts);
 
       final list = (response.data as List)
           .map((item) => FactModel.fromJson(item as Map<String, dynamic>))
@@ -126,10 +115,9 @@ class NinjaRepositoryImpl implements NinjaRepository {
   Future<Map<String, dynamic>> testConnection() async {
     final stopwatch = Stopwatch()..start();
     try {
-      // Делаем легкий тестовый запрос (1 факт)
+      // Делаем легкий тестовый запрос без query-параметров (на Free-тарифе limit запрещен)
       final response = await _dio.get(
         ApiEndpoints.facts,
-        queryParameters: {'limit': 1},
       );
       stopwatch.stop();
 
